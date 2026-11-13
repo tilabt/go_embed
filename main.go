@@ -21,6 +21,9 @@ var logo []byte
 //go:embed files/b.txt
 var files embed.FS
 
+//go:embed files/*.txt
+var path embed.FS
+
 func main() {
 	fmt.Println(message)
 
@@ -35,6 +38,17 @@ func main() {
 
 	b, _ := files.ReadFile("files/b.txt")
 	fmt.Println(string(b))
+
+	dirs, _ := path.ReadDir("files")
+	for _, entry := range dirs {
+		if !entry.IsDir() {
+			dirFile := fmt.Sprintf("files/%s", entry.Name())
+			file, _ := path.ReadFile(dirFile)
+
+			content := fmt.Sprintf("Content from %s => %s", dirFile, string(file))
+			fmt.Println(content)
+		}
+	}
 
 }
 
