@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	_ "embed"
 	"fmt"
 	"io/fs"
@@ -16,14 +17,24 @@ var message string
 //go:embed tilabt.png
 var logo []byte
 
+//go:embed files/a.txt
+//go:embed files/b.txt
+var files embed.FS
+
 func main() {
 	fmt.Println(message)
 
 	fmt.Printf("Image size: %d bytesn\n", len(logo))
 
-	if err := writeFileWithDirs("dist/tilabt_copy.png", logo, 0644); err != nil {
-		panic(err)
-	}
+	// if err := writeFileWithDirs("dist/tilabt_copy.png", logo, 0644); err != nil {
+	// 	panic(err)
+	// }
+
+	a, _ := files.ReadFile("files/a.txt")
+	fmt.Println(string(a))
+
+	b, _ := files.ReadFile("files/b.txt")
+	fmt.Println(string(b))
 
 }
 
